@@ -11,6 +11,14 @@ interface NewsCardProps {
 }
 
 export default function NewsCard({ newsItem }: NewsCardProps) {
+	const formatDate = (dataString: string) => {
+		const options: Intl.DateTimeFormatOptions = {
+			year: "numeric",
+			month: "long",
+			day: "numeric",
+		};
+		return new Date(dataString).toLocaleDateString("en-US", options);
+	};
 	return (
 		<Card sx={{ maxWidth: 345 }}>
 			<CardMedia
@@ -24,6 +32,9 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					{newsItem.description}
+				</Typography>
+				<Typography sx={{ mt: 1 }} variant="body2" color="text.secondary">
+					Published on: {formatDate(newsItem.publishedAt)}
 				</Typography>
 			</CardContent>
 			<CardActions>

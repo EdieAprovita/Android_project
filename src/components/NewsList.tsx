@@ -14,7 +14,7 @@ const NewsList: React.FC = () => {
 	}
 
 	return (
-		<Grid container spacing={2}>
+		<Grid container spacing={5}>
 			{news.map(item => (
 				<Grid
 					item
