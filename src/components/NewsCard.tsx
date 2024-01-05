@@ -20,18 +20,18 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
 		return new Date(dataString).toLocaleDateString("en-US", options);
 	};
 	return (
-		<Card sx={{ maxWidth: 345 }}>
+		<Card sx={{ maxWidth: 550, maxHeight: 400 }}>
 			<CardMedia
-				sx={{ height: 140 }}
+				sx={{ height: 100, objectFit: "cover" }}
 				image={newsItem.urlToImage || "/static/images/default-news.jpg"}
 				title={newsItem.title}
 			/>
-			<CardContent>
-				<Typography gutterBottom variant="h5" component="div">
-					{newsItem.title}
+			<CardContent sx={{ paddingBottom: "16px" }}>
+				<Typography gutterBottom variant="h6" component="div">
+					{newsItem.title.slice(0, 80)}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
-					{newsItem.description}
+					{newsItem.description.slice(0, 60)}
 				</Typography>
 				<Typography sx={{ mt: 1 }} variant="body2" color="text.secondary">
 					Published on: {formatDate(newsItem.publishedAt)}

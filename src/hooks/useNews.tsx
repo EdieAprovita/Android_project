@@ -10,7 +10,7 @@ const useNews = (page: number) => {
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const [totalPages, setTotalPages] = useState<number>(0);
-	const pageSize = 10;
+	const pageSize = 12;
 
 	useEffect(() => {
 		const fetchNews = async () => {
