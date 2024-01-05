@@ -28,7 +28,7 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
 			/>
 			<CardContent sx={{ paddingBottom: "16px" }}>
 				<Typography gutterBottom variant="h6" component="div">
-					{newsItem.title.slice(0, 80)}
+					{newsItem.title.slice(0, 50)}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
 					{newsItem.description.slice(0, 60)}

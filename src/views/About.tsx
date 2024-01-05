@@ -1,13 +1,13 @@
 import { Box, Typography } from "@mui/material";
 
-const FavoriteNews = () => {
+const About = () => {
 	return (
 		<Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
 			<Typography variant="h4" component="h1" gutterBottom>
-				Favorite News
+				About
 			</Typography>
 		</Box>
 	);
 };
 
-export default FavoriteNews;
+export default About;
