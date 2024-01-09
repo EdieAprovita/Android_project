@@ -7,7 +7,8 @@ import { Grid, Stack, Pagination, Typography } from "@mui/material";
 
 const NewsList: React.FC = () => {
 	const [page, setPage] = useState<number>(1);
-	const { news, loading, error, totalPages } = useNews(page);
+	const { news, loading, error, totalPages, addToFavorites, favoriteNews } =
+		useNews(page);
 
 	const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
@@ -29,7 +30,11 @@ const NewsList: React.FC = () => {
 				<Grid container spacing={5} justifyContent="center">
 					{news.map(item => (
 						<Grid item xs={12} sm={6} md={4} lg={3} key={item.url}>
-							<NewsCard newsItem={item} />
+							<NewsCard
+								newsItem={item}
+								addToFavorites={addToFavorites}
+								favoriteNews={favoriteNews}
+							/>
 						</Grid>
 					))}
 				</Grid>

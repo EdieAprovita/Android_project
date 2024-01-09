@@ -1,16 +1,24 @@
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import { NewsItem } from "../models/News"; // Asegúrate de tener este modelo definido
+import {
+	Card,
+	CardActions,
+	CardContent,
+	CardMedia,
+	Button,
+	Typography,
+} from "@mui/material";
+import { NewsItem } from "../models/Interfaces";
 
 interface NewsCardProps {
 	readonly newsItem: NewsItem;
+	addToFavorites: (newsItem: NewsItem) => void;
+	favoriteNews: NewsItem[];
 }
 
-export default function NewsCard({ newsItem }: NewsCardProps) {
+export default function NewsCard({
+	newsItem,
+	addToFavorites,
+	favoriteNews,
+}: Readonly<NewsCardProps>) {
 	const formatDate = (dataString: string) => {
 		const options: Intl.DateTimeFormatOptions = {
 			year: "numeric",
@@ -19,6 +27,9 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
 		};
 		return new Date(dataString).toLocaleDateString("en-US", options);
 	};
+
+	const isFavorite = favoriteNews.some(item => item.url === newsItem.url);
+
 	return (
 		<Card sx={{ maxWidth: 550, maxHeight: 400 }}>
 			<CardMedia
@@ -44,7 +55,13 @@ export default function NewsCard({ newsItem }: NewsCardProps) {
 					target="_blank"
 					rel="noopener noreferrer">
 					Read More
-				</Button>{" "}
+				</Button>
+				<Button
+					size="small"
+					onClick={() => addToFavorites(newsItem)}
+					disabled={isFavorite}>
+					{isFavorite ? "Favorito" : "Añadir a Favoritos"}
+				</Button>
 			</CardActions>
 		</Card>
 	);

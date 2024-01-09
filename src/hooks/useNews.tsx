@@ -1,18 +1,34 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { NewsItem } from "../models/News";
+import { NewsArticle } from "../models/Interfaces";
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const BASE_URL = "https://newsapi.org/v2";
 
 type NewsType = "all" | "top";
 
-const useNews = (page: number, type: NewsType = "all") => {
-	const [news, setNews] = useState<NewsItem[]>([]);
+interface NewsHookReturn {
+	news: NewsArticle[];
+	loading: boolean;
+	error: string | null;
+	totalPages: number;
+	favoriteNews: NewsArticle[];
+	addToFavorites: (newsItem: NewsArticle) => void;
+}
+
+const useNews = (page: number, type: NewsType = "all"): NewsHookReturn => {
+	const [news, setNews] = useState<NewsArticle[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
 	const [totalPages, setTotalPages] = useState<number>(0);
+	const [favoriteNews, setFavoriteNews] = useState<NewsArticle[]>([]);
+
 	const pageSize = 12;
+
+	const addToFavorites = (newsItem: NewsArticle) => {
+		setFavoriteNews(prevFavorites => [...prevFavorites, newsItem]);
+		console.log(favoriteNews);
+	};
 
 	useEffect(() => {
 		const fetchNews = async () => {
@@ -47,7 +63,7 @@ const useNews = (page: number, type: NewsType = "all") => {
 		fetchNews();
 	}, [page, type]);
 
-	return { news, loading, error, totalPages };
+	return { news, loading, error, totalPages, favoriteNews, addToFavorites };
 };
 
 export default useNews;
