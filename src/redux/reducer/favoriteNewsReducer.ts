@@ -2,9 +2,10 @@ import {
 	FETCH_FAVORITE_NEWS,
 	FETCH_FAVORITE_NEWS_SUCCESS,
 	FETCH_FAVORITE_NEWS_FAILURE,
+	ADD_FAVORITE_NEWS,
 } from "../constants";
 
-import { NewsApiResponse } from "../../models/Interfaces";
+import { NewsApiResponse, NewsArticle } from "../../models/Interfaces";
 
 interface FavoriteNewsState {
 	loading: boolean;
@@ -21,7 +22,8 @@ const initialState: FavoriteNewsState = {
 type FavoriteNewsAction =
 	| { type: typeof FETCH_FAVORITE_NEWS }
 	| { type: typeof FETCH_FAVORITE_NEWS_SUCCESS; payload: NewsApiResponse }
-	| { type: typeof FETCH_FAVORITE_NEWS_FAILURE; payload: string };
+	| { type: typeof FETCH_FAVORITE_NEWS_FAILURE; payload: string }
+	| { type: typeof ADD_FAVORITE_NEWS; payload: NewsArticle };
 
 const favoriteNewsReducer = (
 	state = initialState,
@@ -47,6 +49,13 @@ const favoriteNewsReducer = (
 				favoriteNews: null,
 				error: action.payload,
 			};
+		case ADD_FAVORITE_NEWS:
+			return {
+				...state,
+				favoriteNews: state.favoriteNews
+					? [...state.favoriteNews, action.payload]
+					: [action.payload],
+			} as FavoriteNewsState;
 		default:
 			return state;
 	}

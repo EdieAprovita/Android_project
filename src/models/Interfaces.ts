@@ -49,3 +49,19 @@ export interface TopHeadlinesApiRequestParams {
 	pageSize?: number;
 	page?: number;
 }
+
+export interface GeneralNewsState {
+	loading: boolean;
+	news: NewsArticle[] | null;
+	error: string | null;
+}
+
+export interface TopNewsState {
+	loading: boolean;
+	topNews: NewsArticle[] | null;
+	error: string | null;
+}
+
+export interface FavoriteNewsState {
+	favoriteNews: NewsArticle[];
+}

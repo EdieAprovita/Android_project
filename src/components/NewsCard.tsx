@@ -1,3 +1,7 @@
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { fetchNews } from "../redux/actions/generalNewsActions";
+import { addFavoriteNews } from "../redux/actions/favoriteNewsActions";
 import {
 	Card,
 	CardActions,
@@ -6,19 +10,26 @@ import {
 	Button,
 	Typography,
 } from "@mui/material";
-import { NewsItem } from "../models/Interfaces";
+import { NewsArticle } from "../models/Interfaces";
+import { AppDispatch } from "../redux/store/store";
 
 interface NewsCardProps {
-	readonly newsItem: NewsItem;
-	addToFavorites: (newsItem: NewsItem) => void;
-	favoriteNews: NewsItem[];
+	readonly newsItem: NewsArticle;
+	addToFavorites: (newsItem: NewsArticle) => void;
+	favoriteNews: NewsArticle[];
 }
 
-export default function NewsCard({
-	newsItem,
-	addToFavorites,
-	favoriteNews,
-}: Readonly<NewsCardProps>) {
+const NewsCard: React.FC<NewsCardProps> = ({ newsItem, favoriteNews }) => {
+	const dispatch = useDispatch<AppDispatch>();
+
+	useEffect(() => {
+		dispatch(fetchNews("all"));
+	}, [dispatch]);
+
+	const handleAddToFavorites = (newsItem: NewsArticle) => {
+		dispatch(addFavoriteNews(newsItem));
+	};
+
 	const formatDate = (dataString: string) => {
 		const options: Intl.DateTimeFormatOptions = {
 			year: "numeric",
@@ -58,11 +69,13 @@ export default function NewsCard({
 				</Button>
 				<Button
 					size="small"
-					onClick={() => addToFavorites(newsItem)}
+					onClick={() => handleAddToFavorites(newsItem)}
 					disabled={isFavorite}>
 					{isFavorite ? "Favorito" : "Añadir a Favoritos"}
 				</Button>
 			</CardActions>
 		</Card>
 	);
-}
+};
+
+export default NewsCard;
