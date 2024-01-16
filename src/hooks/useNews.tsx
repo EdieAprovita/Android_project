@@ -10,12 +10,13 @@ const BASE_URL = "https://newsapi.org/v2";
 
 const useNews = (page: number, type: string = "all") => {
 	const dispatch = useDispatch<AppDispatch>();
-	const newsResponse = useSelector((state: RootState) => state.generalNews);
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews);
 	const totalPages = useSelector((state: RootState) => state.generalNews.totalPages);
+	console.log(totalPages);
 
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
+	const [news, setNews] = useState<NewsApiResponse | null>(null);
 
 	const pageSize = 12;
 
@@ -36,6 +37,7 @@ const useNews = (page: number, type: string = "all") => {
 					params,
 				});
 				dispatch(fetchNewsAction("all", response.data.articles, page));
+				setNews(response.data);
 			} catch (err) {
 				if (axios.isAxiosError(err)) {
 					setError(
@@ -52,7 +54,7 @@ const useNews = (page: number, type: string = "all") => {
 		fetchNews();
 	}, [dispatch, page, type]);
 
-	return { news: newsResponse, loading, error, totalPages, favoriteNews };
+	return { news, loading, error, totalPages, favoriteNews };
 };
 
 export default useNews;

@@ -50,6 +50,7 @@ const newsReducer = (state = initialState, action: NewsAction): NewsState => {
 				...state,
 				totalResult: action.payload.totalResults,
 				response: action.payload,
+				totalPages: Math.ceil(action.payload.totalResults / 20),
 			};
 		case FETCH_NEWS_FAILURE:
 			return {

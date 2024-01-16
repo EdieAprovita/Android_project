@@ -9,8 +9,7 @@ import { NewsArticle } from "../models/Interfaces";
 
 const NewsList: React.FC = () => {
 	const [page, setPage] = useState<number>(1);
-	const { news, loading, error, totalPages } = useNews(page).news;
-
+	const { news, loading, error, totalPages } = useNews(page);
 	const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
 		setPage(value);
 	};
@@ -21,7 +20,7 @@ const NewsList: React.FC = () => {
 		content = <Spinner />;
 	} else if (error) {
 		content = <ErrorDisplay retry={() => setPage(1)} message={error} />;
-	} else if (news && news.length === 0) {
+	} else if (news?.articles?.length === 0) {
 		content = (
 			<Typography variant="h4">No hay noticias disponibles en este momento.</Typography>
 		);
@@ -29,7 +28,7 @@ const NewsList: React.FC = () => {
 		content = (
 			<>
 				<Grid container spacing={5} justifyContent="center">
-					{news?.map((item: NewsArticle) => (
+					{news?.articles.map((item: NewsArticle) => (
 						<Grid item xs={12} sm={6} md={4} lg={3} key={uuidv4()}>
 							<NewsCard newsItem={item} />
 						</Grid>
