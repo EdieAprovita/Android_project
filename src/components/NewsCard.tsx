@@ -1,6 +1,5 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
-import { fetchNews } from "../redux/actions/generalNewsActions";
 import { addFavoriteNews } from "../redux/actions/favoriteNewsActions";
 import {
 	Card,
@@ -15,31 +14,22 @@ import { AppDispatch } from "../redux/store/store";
 
 interface NewsCardProps {
 	readonly newsItem: NewsArticle;
-	addToFavorites: (newsItem: NewsArticle) => void;
-	favoriteNews: NewsArticle[];
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ newsItem, favoriteNews }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	const dispatch = useDispatch<AppDispatch>();
 
-	useEffect(() => {
-		dispatch(fetchNews("all"));
-	}, [dispatch]);
-
-	const handleAddToFavorites = (newsItem: NewsArticle) => {
+	const handleAddToFavorites = () => {
 		dispatch(addFavoriteNews(newsItem));
 	};
 
 	const formatDate = (dataString: string) => {
-		const options: Intl.DateTimeFormatOptions = {
+		return new Date(dataString).toLocaleDateString("en-US", {
 			year: "numeric",
 			month: "long",
 			day: "numeric",
-		};
-		return new Date(dataString).toLocaleDateString("en-US", options);
+		});
 	};
-
-	const isFavorite = favoriteNews.some(item => item.url === newsItem.url);
 
 	return (
 		<Card sx={{ maxWidth: 550, maxHeight: 400 }}>
@@ -67,11 +57,8 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem, favoriteNews }) => {
 					rel="noopener noreferrer">
 					Read More
 				</Button>
-				<Button
-					size="small"
-					onClick={() => handleAddToFavorites(newsItem)}
-					disabled={isFavorite}>
-					{isFavorite ? "Favorito" : "Añadir a Favoritos"}
+				<Button size="small" onClick={handleAddToFavorites}>
+					Add to Favorites
 				</Button>
 			</CardActions>
 		</Card>

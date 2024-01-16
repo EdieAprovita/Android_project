@@ -1,23 +1,35 @@
-import { FETCH_NEWS, FETCH_NEWS_SUCCESS, FETCH_NEWS_FAILURE } from "../constants";
+import {
+	FETCH_NEWS,
+	FETCH_NEWS_SUCCESS,
+	FETCH_NEWS_FAILURE,
+	FETCH_NEWS_RESPONSE,
+} from "../constants";
 
-import { NewsApiResponse } from "../../models/Interfaces";
+import { NewsArticle, NewsApiResponse } from "../../models/Interfaces";
 
 interface NewsState {
 	loading: boolean;
-	news: NewsApiResponse[] | null;
+	news: NewsArticle[] | null;
 	error: string | null;
+	totalPages: number;
+	totalResult: number;
+	response: NewsApiResponse | null;
 }
 
 const initialState: NewsState = {
 	loading: false,
 	news: null,
 	error: null,
+	totalPages: 0,
+	totalResult: 0,
+	response: null,
 };
 
 type NewsAction =
 	| { type: typeof FETCH_NEWS }
-	| { type: typeof FETCH_NEWS_SUCCESS; payload: NewsApiResponse }
-	| { type: typeof FETCH_NEWS_FAILURE; payload: string };
+	| { type: typeof FETCH_NEWS_SUCCESS; payload: NewsArticle[] }
+	| { type: typeof FETCH_NEWS_FAILURE; payload: string }
+	| { type: typeof FETCH_NEWS_RESPONSE; payload: NewsApiResponse };
 
 const newsReducer = (state = initialState, action: NewsAction): NewsState => {
 	switch (action.type) {
@@ -30,8 +42,14 @@ const newsReducer = (state = initialState, action: NewsAction): NewsState => {
 			return {
 				...state,
 				loading: false,
-				news: [action.payload],
+				news: action.payload,
 				error: null,
+			};
+		case FETCH_NEWS_RESPONSE:
+			return {
+				...state,
+				totalResult: action.payload.totalResults,
+				response: action.payload,
 			};
 		case FETCH_NEWS_FAILURE:
 			return {
@@ -39,6 +57,8 @@ const newsReducer = (state = initialState, action: NewsAction): NewsState => {
 				loading: false,
 				news: null,
 				error: action.payload,
+				totalPages: 0,
+				totalResult: 0,
 			};
 		default:
 			return state;

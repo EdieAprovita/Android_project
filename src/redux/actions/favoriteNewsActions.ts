@@ -1,6 +1,6 @@
 import axios from "axios";
-import { Dispatch } from "@reduxjs/toolkit";
-
+import { ThunkAction } from "@reduxjs/toolkit";
+import { RootState } from "../store/store";
 import {
 	FETCH_FAVORITE_NEWS,
 	FETCH_FAVORITE_NEWS_SUCCESS,
@@ -17,8 +17,35 @@ import {
 
 type NewsType = "all" | "top";
 
-export const fetchFavoriteNews = (newsType: NewsType) => {
-	return (dispatch: Dispatch) => {
+interface FetchFavoriteNewsAction {
+	type: typeof FETCH_FAVORITE_NEWS;
+}
+
+interface FetchFavoriteNewsSuccessAction {
+	type: typeof FETCH_FAVORITE_NEWS_SUCCESS;
+	payload: NewsApiResponse;
+}
+
+interface FetchFavoriteNewsFailureAction {
+	type: typeof FETCH_FAVORITE_NEWS_FAILURE;
+	payload: string;
+}
+
+interface AddFavoriteNewsAction {
+	type: typeof ADD_FAVORITE_NEWS;
+	payload: NewsArticle;
+}
+
+type FavoriteNewsActions =
+	| FetchFavoriteNewsAction
+	| FetchFavoriteNewsSuccessAction
+	| FetchFavoriteNewsFailureAction
+	| AddFavoriteNewsAction;
+
+export const fetchFavoriteNews = (
+	newsType: NewsType
+): ThunkAction<void, RootState, unknown, FavoriteNewsActions> => {
+	return dispatch => {
 		dispatch({ type: FETCH_FAVORITE_NEWS });
 		const params: NewsApiRequestParams = {
 			apiKey: API_KEY,
@@ -30,7 +57,11 @@ export const fetchFavoriteNews = (newsType: NewsType) => {
 			.then(response => {
 				dispatch({
 					type: FETCH_FAVORITE_NEWS_SUCCESS,
-					payload: response.data.articles,
+					payload: {
+						status: response.data.status,
+						totalResults: response.data.totalResults,
+						articles: response.data.articles,
+					},
 				});
 			})
 			.catch(error => {
@@ -42,8 +73,10 @@ export const fetchFavoriteNews = (newsType: NewsType) => {
 	};
 };
 
-export const addFavoriteNews = (news: NewsArticle) => {
-	return (dispatch: Dispatch) => {
+export const addFavoriteNews = (
+	news: NewsArticle
+): ThunkAction<void, RootState, unknown, FavoriteNewsActions> => {
+	return dispatch => {
 		dispatch({ type: ADD_FAVORITE_NEWS, payload: news });
 	};
 };

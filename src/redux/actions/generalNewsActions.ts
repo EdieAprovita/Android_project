@@ -5,10 +5,15 @@ import {
 	FETCH_NEWS,
 	FETCH_NEWS_SUCCESS,
 	FETCH_NEWS_FAILURE,
+	FETCH_NEWS_RESPONSE,
 	BASE_URL,
 	API_KEY,
 } from "../constants";
-import { NewsApiRequestParams, NewsApiResponse } from "../../models/Interfaces";
+import {
+	NewsApiRequestParams,
+	NewsApiResponse,
+	NewsArticle,
+} from "../../models/Interfaces";
 
 type NewsType = "all" | "top";
 
@@ -20,7 +25,7 @@ interface FetchNewsAction {
 
 interface FetchNewsSuccessAction {
 	type: typeof FETCH_NEWS_SUCCESS;
-	payload: NewsApiResponse;
+	articles: NewsArticle[];
 }
 
 interface FetchNewsFailureAction {
@@ -28,33 +33,53 @@ interface FetchNewsFailureAction {
 	payload: string;
 }
 
+interface FetchNewsResponseAction {
+	type: typeof FETCH_NEWS_RESPONSE;
+	payload: NewsApiResponse;
+}
+
 type GeneralNewsActions =
 	| FetchNewsAction
 	| FetchNewsSuccessAction
-	| FetchNewsFailureAction;
+	| FetchNewsFailureAction
+	| FetchNewsResponseAction;
 
 export const fetchNews = (
-	newsType: NewsType
+	newsType: NewsType,
+	articles: NewsArticle[],
+	page: number
 ): ThunkAction<void, RootState, unknown, GeneralNewsActions> => {
 	return dispatch => {
 		dispatch({ type: FETCH_NEWS });
 		const params: NewsApiRequestParams = {
 			apiKey: API_KEY,
 			q: newsType === "all" ? "bitcoin" : "",
+			page,
 		};
 
 		axios
 			.get<NewsApiResponse>(`${BASE_URL}/everything`, { params })
 			.then(response => {
-				dispatch({
-					type: FETCH_NEWS_SUCCESS,
-					payload: response.data,
-				});
+				if (response.data.status === "ok") {
+					dispatch({
+						type: FETCH_NEWS_RESPONSE,
+						payload: response.data,
+					});
+					dispatch({
+						type: FETCH_NEWS_SUCCESS,
+						articles: articles,
+					});
+				} else {
+					dispatch({
+						type: FETCH_NEWS_FAILURE,
+						payload: "Error al obtener noticias.",
+					});
+				}
 			})
 			.catch(error => {
 				dispatch({
 					type: FETCH_NEWS_FAILURE,
-					payload: error,
+					payload: error.message || "Error desconocido",
 				});
 			});
 	};

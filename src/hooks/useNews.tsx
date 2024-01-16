@@ -1,34 +1,23 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { NewsArticle } from "../models/Interfaces";
+import axios, { AxiosError } from "axios";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState, AppDispatch } from "../redux/store/store";
+import { fetchNews as fetchNewsAction } from "../redux/actions/generalNewsActions";
+import { NewsApiResponse } from "../models/Interfaces";
 
 const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 const BASE_URL = "https://newsapi.org/v2";
 
-type NewsType = "all" | "top";
+const useNews = (page: number, type: string = "all") => {
+	const dispatch = useDispatch<AppDispatch>();
+	const newsResponse = useSelector((state: RootState) => state.generalNews);
+	const favoriteNews = useSelector((state: RootState) => state.favoriteNews);
+	const totalPages = useSelector((state: RootState) => state.generalNews.totalPages);
 
-interface NewsHookReturn {
-	news: NewsArticle[];
-	loading: boolean;
-	error: string | null;
-	totalPages: number;
-	favoriteNews: NewsArticle[];
-	addToFavorites: (newsItem: NewsArticle) => void;
-}
-
-const useNews = (page: number, type: NewsType = "all"): NewsHookReturn => {
-	const [news, setNews] = useState<NewsArticle[]>([]);
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
-	const [totalPages, setTotalPages] = useState<number>(0);
-	const [favoriteNews, setFavoriteNews] = useState<NewsArticle[]>([]);
 
 	const pageSize = 12;
-
-	const addToFavorites = (newsItem: NewsArticle) => {
-		setFavoriteNews(prevFavorites => [...prevFavorites, newsItem]);
-		console.log(favoriteNews);
-	};
 
 	useEffect(() => {
 		const fetchNews = async () => {
@@ -37,23 +26,23 @@ const useNews = (page: number, type: NewsType = "all"): NewsHookReturn => {
 				setError(null);
 				const endpoint = type === "all" ? "/everything" : "/top-headlines";
 				const params = {
-					...(type === "top" && { country: "us" }),
-					q: type === "all" ? "bitcoin" : undefined,
 					apiKey: API_KEY,
+					q: type === "all" ? "bitcoin" : undefined,
 					page,
 					pageSize,
+					...(type === "top" && { country: "us" }),
 				};
-				const response = await axios.get(`${BASE_URL}${endpoint}`, { params });
-				setNews(response.data.articles);
-				const totalResults = response.data.totalResults;
-				setTotalPages(Math.ceil(totalResults / pageSize));
-			} catch (error) {
-				if (error instanceof axios.AxiosError) {
+				const response = await axios.get<NewsApiResponse>(`${BASE_URL}${endpoint}`, {
+					params,
+				});
+				dispatch(fetchNewsAction("all", response.data.articles, page));
+			} catch (err) {
+				if (axios.isAxiosError(err)) {
 					setError(
-						`Error al cargar las noticias: ${error.response?.statusText ?? error.message}`
+						`Error al cargar las noticias: ${err.response?.statusText ?? err.message}`
 					);
 				} else {
-					setError(`Error al cargar las noticias: ${(error as Error).message}`);
+					setError(`Error al cargar las noticias: ${(err as AxiosError).message}`);
 				}
 			} finally {
 				setLoading(false);
@@ -61,9 +50,9 @@ const useNews = (page: number, type: NewsType = "all"): NewsHookReturn => {
 		};
 
 		fetchNews();
-	}, [page, type]);
+	}, [dispatch, page, type]);
 
-	return { news, loading, error, totalPages, favoriteNews, addToFavorites };
+	return { news: newsResponse, loading, error, totalPages, favoriteNews };
 };
 
 export default useNews;
