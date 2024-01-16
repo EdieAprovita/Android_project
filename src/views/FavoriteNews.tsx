@@ -1,36 +1,29 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
-
-import ErrorDisplay from "../components/ErrorDisplay";
+import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store/store";
+import { NewsArticle } from "../models/Interfaces";
 import NewsCard from "../components/NewsCard";
-import useNews from "../hooks/useNews";
+import { Grid, Typography, Box } from "@mui/material";
 
-const FavoriteNews: React.FC = () => {
-	const { favoriteNews, error } = useNews(1);
-	console.log(favoriteNews);
+const FavoriteNewsPage: React.FC = () => {
+	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
 
-	if (error) {
-		return <ErrorDisplay retry={() => {}} message={error} />;
-	}
-
-	if (favoriteNews.length === 0) {
-		return (
-			<Typography variant="h4">No tienes noticias favoritas en este momento.</Typography>
-		);
-	}
 	return (
-		<Box sx={{ display: "flex", justifyContent: "center", my: 4 }}>
-			<Typography variant="h4" component="h1" gutterBottom>
+		<Box>
+			<Typography
+				variant="h3"
+				sx={{
+					textAlign: "center",
+					marginTop: "20px",
+					marginBottom: "20px",
+				}}>
 				Favorite News
 			</Typography>
-			<Grid container spacing={5} justifyContent="center">
-				{favoriteNews.map(item => (
-					<Grid item xs={12} sm={6} md={4} lg={3} key={item.author}>
-						<NewsCard
-							newsItem={item}
-							addToFavorites={() => {}}
-							favoriteNews={favoriteNews}
-						/>
+			<Grid container spacing={3}>
+				{favoriteNews?.map((item: NewsArticle) => (
+					<Grid item xs={12} sm={6} md={4} lg={3} key={uuidv4()}>
+						<NewsCard newsItem={item} />
 					</Grid>
 				))}
 			</Grid>
@@ -38,4 +31,4 @@ const FavoriteNews: React.FC = () => {
 	);
 };
 
-export default FavoriteNews;
+export default FavoriteNewsPage;

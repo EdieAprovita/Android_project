@@ -1,5 +1,5 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addFavoriteNews } from "../redux/actions/favoriteNewsActions";
 import {
 	Card,
@@ -10,7 +10,8 @@ import {
 	Typography,
 } from "@mui/material";
 import { NewsArticle } from "../models/Interfaces";
-import { AppDispatch } from "../redux/store/store";
+import { AppDispatch, RootState } from "../redux/store/store";
+import { useNavigate } from "react-router-dom";
 
 interface NewsCardProps {
 	readonly newsItem: NewsArticle;
@@ -18,9 +19,16 @@ interface NewsCardProps {
 
 const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	const dispatch = useDispatch<AppDispatch>();
+	const navigate = useNavigate();
+	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
+
+	const isFavorite = favoriteNews?.some(item => item.url === newsItem.url);
 
 	const handleAddToFavorites = () => {
-		dispatch(addFavoriteNews(newsItem));
+		if (!isFavorite) {
+			dispatch(addFavoriteNews(newsItem));
+		}
+		navigate("/favorites-news");
 	};
 
 	const formatDate = (dataString: string) => {
@@ -57,7 +65,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 					rel="noopener noreferrer">
 					Read More
 				</Button>
-				<Button size="small" onClick={handleAddToFavorites}>
+				<Button size="small" onClick={handleAddToFavorites} disabled={isFavorite}>
 					Add to Favorites
 				</Button>
 			</CardActions>
