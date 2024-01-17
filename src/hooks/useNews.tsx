@@ -12,7 +12,6 @@ const useNews = (page: number, type: string = "all") => {
 	const dispatch = useDispatch<AppDispatch>();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews);
 	const totalPages = useSelector((state: RootState) => state.generalNews.totalPages);
-	console.log(totalPages);
 
 	const [loading, setLoading] = useState<boolean>(true);
 	const [error, setError] = useState<string | null>(null);
