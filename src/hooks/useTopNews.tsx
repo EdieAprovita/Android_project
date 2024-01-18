@@ -4,15 +4,12 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store/store";
 import { fetchTopNews as fetchTopNewsAction } from "../redux/actions/topNewsAction";
 import { NewsApiResponse } from "../models/Interfaces";
-
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-const BASE_URL = "https://newsapi.org/v2";
+import { API_KEY, BASE_URL } from "../redux/constants";
 
 const useTopNews = (page: number, type: string = "top") => {
 	const dispatch = useDispatch<AppDispatch>();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews);
-	const totalPages = useSelector((state: RootState) => state.generalNews.totalPages);
-	console.log(totalPages);
+	const totalPages = useSelector((state: RootState) => state.topNews.totalPages);
 
 	const pageSize = 12;
 
@@ -35,8 +32,14 @@ const useTopNews = (page: number, type: string = "top") => {
 				const response = await axios.get<NewsApiResponse>(`${BASE_URL}${endpoint}`, {
 					params,
 				});
-				dispatch(fetchTopNewsAction("top", response.data.articles, page));
-				setNews(response.data);
+				if (response.data.status === "ok") {
+					const newArticles = response.data.articles;
+					dispatch(fetchTopNewsAction("top", newArticles, page));
+					setNews(response.data);
+					console.log("Response data hook", response.data);
+				} else {
+					setError("Error al obtener noticias.");
+				}
 			} catch (err) {
 				if (axios.isAxiosError(err)) {
 					setError(
