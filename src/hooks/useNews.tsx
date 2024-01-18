@@ -4,9 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store/store";
 import { fetchNews as fetchNewsAction } from "../redux/actions/generalNewsActions";
 import { NewsApiResponse } from "../models/Interfaces";
-
-const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
-const BASE_URL = "https://newsapi.org/v2";
+import { API_KEY, BASE_URL } from "../redux/constants";
 
 const useNews = (page: number, type: string = "all") => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -24,7 +22,7 @@ const useNews = (page: number, type: string = "all") => {
 			try {
 				setLoading(true);
 				setError(null);
-				const endpoint = type === "all" ? "/everything" : "/top-headlines";
+				const endpoint = "/everything";
 				const params = {
 					apiKey: API_KEY,
 					q: type === "all" ? "bitcoin" : undefined,

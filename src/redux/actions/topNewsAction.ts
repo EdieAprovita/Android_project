@@ -53,7 +53,7 @@ export const fetchTopNews = (
 		dispatch({ type: FETCH_TOP_NEWS });
 		const params: NewsApiRequestParams = {
 			apiKey: API_KEY,
-			q: "top",
+			q: newsType === "top" ? "bitcoin" : "",
 			page,
 		};
 
