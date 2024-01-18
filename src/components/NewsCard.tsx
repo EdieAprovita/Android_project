@@ -22,6 +22,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	const navigate = useNavigate();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
 
+	const [isHovered, setIsHovered] = React.useState<boolean>(false);
 	const isFavorite = favoriteNews?.some(item => item.url === newsItem.url);
 
 	const handleAddToFavorites = () => {
@@ -40,7 +41,16 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	};
 
 	return (
-		<Card sx={{ maxWidth: 550, maxHeight: 400 }}>
+		<Card
+			sx={{
+				maxWidth: 550,
+				maxHeight: 400,
+				transition: "box-shadow 0.3s",
+				boxShadow: isHovered ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
+				backgroundColor: isHovered ? "#f0f0f0" : "white",
+			}}
+			onMouseEnter={() => setIsHovered(true)}
+			onMouseLeave={() => setIsHovered(false)}>
 			<CardMedia
 				sx={{ height: 100, objectFit: "cover" }}
 				image={newsItem.urlToImage || "/static/images/default-news.jpg"}
