@@ -12,12 +12,14 @@ import {
 import { NewsArticle } from "../models/Interfaces";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 interface NewsCardProps {
 	readonly newsItem: NewsArticle;
 }
 
 const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
+	const theme = useTheme();
 	const dispatch = useDispatch<AppDispatch>();
 	const navigate = useNavigate();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
@@ -47,7 +49,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 				maxHeight: 400,
 				transition: "box-shadow 0.3s",
 				boxShadow: isHovered ? "0 4px 8px rgba(0, 0, 0, 0.2)" : "none",
-				backgroundColor: isHovered ? "#f0f0f0" : "white",
+				backgroundColor: isHovered ? "white" : theme.palette.primary.main,
 			}}
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}>

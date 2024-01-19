@@ -53,7 +53,7 @@ const TopNewsCard: React.FC<TopNewsCardProps> = ({ topNewsItem }) => {
 			onMouseLeave={() => setIsHovered(false)}>
 			<CardMedia
 				sx={{ height: 100, objectFit: "cover" }}
-				image={topNewsItem.urlToImage || "/static/images/default-news.jpg"}
+				image={topNewsItem.urlToImage ?? "../assets/dafault2.png"}
 				title={topNewsItem.title}
 			/>
 			<CardContent sx={{ paddingBottom: "16px" }}>
