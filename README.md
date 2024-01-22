@@ -1,6 +1,5 @@
 # News Application with React, TypeScript, and Vite
 
-![App Screenshot](/screenshot.png)
 
 ## Description
 
@@ -63,4 +62,4 @@ npm run test
 
 ## Author
 
-- [Edgar Chavero]
+- Edgar Chavero
