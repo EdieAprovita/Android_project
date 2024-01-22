@@ -16,7 +16,7 @@ interface NewsState {
 	response: NewsApiResponse | null;
 }
 
-const initialState: NewsState = {
+export const initialState: NewsState = {
 	loading: false,
 	news: null,
 	error: null,
@@ -25,7 +25,7 @@ const initialState: NewsState = {
 	response: null,
 };
 
-type NewsAction =
+export type NewsAction =
 	| { type: typeof FETCH_NEWS }
 	| { type: typeof FETCH_NEWS_SUCCESS; payload: NewsArticle[] }
 	| { type: typeof FETCH_NEWS_FAILURE; payload: string }

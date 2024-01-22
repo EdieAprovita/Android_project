@@ -13,21 +13,21 @@ import { NewsArticle } from "../models/Interfaces";
 import { AppDispatch, RootState } from "../redux/store/store";
 import { useNavigate } from "react-router-dom";
 
-interface NewsCardProps {
-	readonly newsItem: NewsArticle;
+interface TopNewsCardProps {
+	readonly topNewsItem: NewsArticle;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
+const TopNewsCard: React.FC<TopNewsCardProps> = ({ topNewsItem }) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const navigate = useNavigate();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
 
 	const [isHovered, setIsHovered] = React.useState<boolean>(false);
-	const isFavorite = favoriteNews?.some(item => item.url === newsItem.url);
+	const isFavorite = favoriteNews?.some(item => item.url === topNewsItem.url);
 
 	const handleAddToFavorites = () => {
 		if (!isFavorite) {
-			dispatch(addFavoriteNews(newsItem));
+			dispatch(addFavoriteNews(topNewsItem));
 		}
 		navigate("/favorites-news");
 	};
@@ -53,24 +53,24 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 			onMouseLeave={() => setIsHovered(false)}>
 			<CardMedia
 				sx={{ height: 100, objectFit: "cover" }}
-				image={newsItem.urlToImage || "/static/images/default-news.jpg"}
-				title={newsItem.title}
+				image={topNewsItem.urlToImage ?? "../assets/dafault2.png"}
+				title={topNewsItem.title}
 			/>
 			<CardContent sx={{ paddingBottom: "16px" }}>
 				<Typography gutterBottom variant="h6" component="div">
-					{newsItem.title.slice(0, 50)}
+					{topNewsItem.title.slice(0, 50)}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
-					{newsItem.description.slice(0, 60)}
+					{topNewsItem.description}
 				</Typography>
 				<Typography sx={{ mt: 1 }} variant="body2" color="text.secondary">
-					Published on: {formatDate(newsItem.publishedAt)}
+					Published on: {formatDate(topNewsItem.publishedAt)}
 				</Typography>
 			</CardContent>
 			<CardActions>
 				<Button
 					size="small"
-					href={newsItem.url}
+					href={topNewsItem.url}
 					target="_blank"
 					rel="noopener noreferrer">
 					Read More
@@ -83,4 +83,4 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	);
 };
 
-export default NewsCard;
+export default TopNewsCard;

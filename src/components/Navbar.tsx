@@ -1,10 +1,12 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 const Navbar: React.FC = () => {
+	const theme = useTheme();
 	return (
-		<AppBar position="static">
+		<AppBar position="sticky" sx={{ backgroundColor: theme.palette.primary.main }}>
 			<Toolbar>
 				<Typography variant="h6" style={{ flexGrow: 1 }}>
 					My News App

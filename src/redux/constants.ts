@@ -11,6 +11,7 @@ export const ADD_FAVORITE_NEWS = "ADD_FAVORITE_NEWS";
 export const FETCH_TOP_NEWS = "FETCH_TOP_NEWS";
 export const FETCH_TOP_NEWS_SUCCESS = "FETCH_TOP_NEWS_SUCCESS";
 export const FETCH_TOP_NEWS_FAILURE = "FETCH_TOP_NEWS_FAILURE";
+export const FETCH_TOP_NEWS_RESPONSE = "FETCH_TOP_NEWS_RESPONSE";
 
 export const API_KEY = import.meta.env.VITE_NEWS_API_KEY;
 export const BASE_URL = "https://newsapi.org/v2";
