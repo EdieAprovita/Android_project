@@ -1,35 +1,65 @@
-# React + TypeScript + Vite
+# News Application with React, TypeScript, and Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-Currently, two official plugins are available:
+## Description
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This project is a News Application built with React and TypeScript, powered by Vite, a fast build tool. It retrieves data from a public news API and displays a list of news articles. The application offers various features, including error handling, caching, pagination, favorites, and animations, following Material Design principles.
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- List of news articles with titles, descriptions, and publication dates.
+- Clicking on an article opens a detailed view.
+- Robust error handling for internet connection issues and data retrieval failures.
+- Caching mechanism to minimize API requests and enhance loading speed.
+- Pagination to load more articles as users scroll down.
+- Favorites functionality to mark and view favorite news articles.
+- Incorporation of smooth transitions and animations following Material Design principles.
+- Proper state management for loading, success, and error states.
 
-- Configure the top-level `parserOptions` property like this:
+## Technologies Used
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+- React with TypeScript for type-safe development.
+- Material UI for applying Material Design principles to the user interface.
+- Redux for state management and data flow within the application.
+- Axios for making API requests to retrieve news data.
+- Jest and React Testing Library for unit testing components and functions.
+- Vite, a fast build tool, to set up the project quickly.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
-# Android_project
-# Android_project
-# Android_project
-# Android_project
-# Android_project
+## Project Structure
+
+- `src/components`: Contains all React components.
+- `src/redux`: Manages the Redux store, actions, and reducers.
+- `src/api`: Handles API requests and caching.
+- `src/utils`: Utility functions used throughout the application.
+- `src/tests`: Unit tests for components and functions.
+- `src/assets`: Static assets like images and icons.
+
+## Installation
+
+Clone the repository and install the dependencies:
+
+npm install
+
+## Usage
+
+create a .env file in the root directory and add your API key:
+
+REACT_APP_API_KEY=your_api_key
+
+Start the development server:
+
+npm run dev
+
+## Testing
+
+Run unit tests:
+
+npm run test
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
+## Author
+
+- Edgar Chavero

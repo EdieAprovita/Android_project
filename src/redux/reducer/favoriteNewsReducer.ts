@@ -13,13 +13,13 @@ interface FavoriteNewsState {
 	error: string | null;
 }
 
-const initialState: FavoriteNewsState = {
+export const initialState: FavoriteNewsState = {
 	loading: false,
 	favoriteNews: null,
 	error: null,
 };
 
-type FavoriteNewsAction =
+export type FavoriteNewsAction =
 	| { type: typeof FETCH_FAVORITE_NEWS }
 	| { type: typeof FETCH_FAVORITE_NEWS_SUCCESS; payload: NewsArticle[] }
 	| { type: typeof FETCH_FAVORITE_NEWS_FAILURE; payload: string }

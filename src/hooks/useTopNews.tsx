@@ -3,8 +3,9 @@ import axios, { AxiosError } from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store/store";
 import { fetchTopNews as fetchTopNewsAction } from "../redux/actions/topNewsAction";
-import { NewsApiResponse } from "../models/Interfaces";
+import { NewsApiResponse, ApiError } from "../models/Interfaces";
 import { API_KEY, BASE_URL } from "../redux/constants";
+import handleApiError from "../utils/ErrorHandler";
 
 const useTopNews = (page: number, type: string = "top") => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -45,6 +46,7 @@ const useTopNews = (page: number, type: string = "top") => {
 					setError(
 						`Error al cargar las noticias: ${err.response?.statusText ?? err.message}`
 					);
+					handleApiError(err as AxiosError<ApiError>);
 				} else {
 					setError(`Error al cargar las noticias: ${(err as AxiosError).message}`);
 				}

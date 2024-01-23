@@ -34,8 +34,7 @@ const NewsList: React.FC<NewsListProps> = () => {
 	if (loading) {
 		content = <Spinner />;
 	} else if (error) {
-		toast.error(error);
-		content = <ErrorDisplay retry={() => setPage(1)} message={error} />;
+		content = <ErrorDisplay retry={() => setPage(1)} message={error.message} />;
 	} else if (news?.articles?.length === 0 && !storedNewsData) {
 		content = (
 			<Typography variant="h4">No hay noticias disponibles en este momento.</Typography>
