@@ -65,3 +65,8 @@ export interface TopNewsState {
 export interface FavoriteNewsState {
 	favoriteNews: NewsArticle[];
 }
+
+export interface ApiError {
+	code: string;
+	message: string;
+}

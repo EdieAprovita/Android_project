@@ -3,8 +3,9 @@ import axios, { AxiosError } from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "../redux/store/store";
 import { fetchNews as fetchNewsAction } from "../redux/actions/generalNewsActions";
-import { NewsApiResponse } from "../models/Interfaces";
+import { NewsApiResponse, ApiError } from "../models/Interfaces";
 import { API_KEY, BASE_URL } from "../redux/constants";
+import handleApiError from "../utils/ErrorHandler";
 
 const useNews = (page: number, type: string = "all") => {
 	const dispatch = useDispatch<AppDispatch>();
@@ -12,7 +13,7 @@ const useNews = (page: number, type: string = "all") => {
 	const totalPages = useSelector((state: RootState) => state.generalNews.totalPages);
 
 	const [loading, setLoading] = useState<boolean>(true);
-	const [error, setError] = useState<string | null>(null);
+	const [error, setError] = useState<AxiosError<ApiError> | null>(null);
 	const [news, setNews] = useState<NewsApiResponse | null>(null);
 
 	const pageSize = 12;
@@ -36,20 +37,15 @@ const useNews = (page: number, type: string = "all") => {
 				dispatch(fetchNewsAction("all", response.data.articles, page));
 				setNews(response.data);
 			} catch (err) {
-				if (axios.isAxiosError(err)) {
-					setError(
-						`Error al cargar las noticias: ${err.response?.statusText ?? err.message}`
-					);
-				} else {
-					setError(`Error al cargar las noticias: ${(err as AxiosError).message}`);
-				}
+				setError(err as AxiosError<ApiError>);
+				handleApiError(err as AxiosError<ApiError>);
 			} finally {
 				setLoading(false);
 			}
 		};
 
 		fetchNews();
-	}, [dispatch, page, type]);
+	}, [dispatch, page, type, error]);
 
 	return { news, loading, error, totalPages, favoriteNews };
 };
