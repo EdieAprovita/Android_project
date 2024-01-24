@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ThunkAction } from "@reduxjs/toolkit";
 import { RootState } from "../store/store";
 import {
@@ -13,7 +13,9 @@ import {
 	NewsApiRequestParams,
 	NewsApiResponse,
 	NewsArticle,
+	ApiError,
 } from "../../models/Interfaces";
+import handleApiError from "../../utils/ErrorHandler";
 
 type NewsType = "all" | "top";
 
@@ -69,6 +71,9 @@ export const fetchFavoriteNews = (
 					type: FETCH_FAVORITE_NEWS_FAILURE,
 					payload: error,
 				});
+				if (axios.isAxiosError(error)) {
+					handleApiError(error as AxiosError<ApiError>);
+				}
 			});
 	};
 };
