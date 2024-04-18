@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavoriteNews } from "../redux/actions/favoriteNewsActions";
+import { addFavoriteNews } from "../redux/slices/favoriteNewsSlice";
 import {
 	Card,
 	CardActions,

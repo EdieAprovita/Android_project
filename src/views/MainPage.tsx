@@ -10,7 +10,7 @@ const MainPage: React.FC = () => {
 					My News App
 				</Typography>
 			</Box>
-			<NewsList news={null} />
+			<NewsList />
 		</div>
 	);
 };
