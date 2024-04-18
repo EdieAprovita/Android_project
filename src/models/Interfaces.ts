@@ -1,3 +1,14 @@
+export interface State<T> {
+	loading: boolean;
+	data: T | null;
+	error: string | null;
+	totalPages?: number;
+}
+
+export type NewsState = State<NewsArticle[]>;
+export type TopsNewsState = State<NewsArticle[]>;
+export type FavoritesNewsState = State<NewsArticle[]>;
+
 export interface NewsApiRequestParams {
 	apiKey: string;
 	q: string;

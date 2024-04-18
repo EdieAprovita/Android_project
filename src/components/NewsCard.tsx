@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addFavoriteNews } from "../redux/actions/favoriteNewsActions";
+import { addFavoriteNews } from "../redux/slices/favoriteNewsSlice";
 import {
 	Card,
 	CardActions,
@@ -21,6 +21,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 	const dispatch = useDispatch<AppDispatch>();
 	const navigate = useNavigate();
 	const favoriteNews = useSelector((state: RootState) => state.favoriteNews.favoriteNews);
+	const defaultImage = "../assets/dafault2.png";
 
 	const [isHovered, setIsHovered] = React.useState<boolean>(false);
 	const isFavorite = favoriteNews?.some(item => item.url === newsItem.url);
@@ -53,7 +54,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 			onMouseLeave={() => setIsHovered(false)}>
 			<CardMedia
 				sx={{ height: 100, objectFit: "cover" }}
-				image={newsItem.urlToImage || "/static/images/default-news.jpg"}
+				image={newsItem.urlToImage ?? defaultImage}
 				title={newsItem.title}
 			/>
 			<CardContent sx={{ paddingBottom: "16px" }}>
@@ -61,7 +62,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsItem }) => {
 					{newsItem.title.slice(0, 50)}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
-					{newsItem.description.slice(0, 60)}
+					{newsItem.description?.slice(0, 40)}
 				</Typography>
 				<Typography sx={{ mt: 1 }} variant="body2" color="text.secondary">
 					Published on: {formatDate(newsItem.publishedAt)}
